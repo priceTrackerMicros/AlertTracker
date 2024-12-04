@@ -39,3 +39,4 @@ jobs:
           context: .
           push: true
           tags: scaredste/alert-tracker:latest
+          platforms: linux/arm64
