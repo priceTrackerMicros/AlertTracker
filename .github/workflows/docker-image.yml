@@ -5,7 +5,8 @@ on:
     branches: [ "feature/test" ]
 
 jobs:
-  runs-on: ubuntu-latest
+  build: Create and push image
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout the repository
