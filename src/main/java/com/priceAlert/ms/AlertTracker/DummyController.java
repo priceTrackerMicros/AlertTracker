@@ -1,4 +1,4 @@
-package com.priceAlert.AlertTracker;
+package com.priceAlert.ms.AlertTracker;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
