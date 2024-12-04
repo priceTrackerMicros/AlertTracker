@@ -20,6 +20,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Give mvnw executable permissions
+        run: chmod +x ./mvnw
+
       - name: Build and package Spring Boot application with Maven
         run: ./mvnw clean package
 
