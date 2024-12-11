@@ -1,0 +1,48 @@
+{
+  "type": "record",
+  "name": "PriceAlert",
+  "namespace": "com.priceAlert.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "doc": "Unique identifier for the price alert"
+    },
+    {
+      "name": "productId",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "ID of the product being tracked, can be null initially"
+    },
+    {
+      "name": "userId",
+      "type": "string",
+      "doc": "ID of the user who created the alert"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Name of the alert"
+    },
+    {
+      "name": "targetPrice",
+      "type": "double",
+      "doc": "The target price for the alert"
+    },
+    {
+      "name": "targetReached",
+      "type": "boolean",
+      "doc": "Whether the target price has been reached"
+    },
+    {
+      "name": "productUrl",
+      "type": "string",
+      "doc": "URL of the product"
+    },
+    {
+      "name": "marketplace",
+      "type": "string",
+      "doc": "Marketplace associated with the product, e.g., Amazon"
+    }
+  ]
+}
