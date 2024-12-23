@@ -10,10 +10,11 @@ public class PriceAlert {
 
     @Id
     private String id;
-    private String productId;  // To be obtained from the scraper service
-    private String userId;
+    private String productId;  // From the scraper
+    private String phoneNumber;  // User's phone number with country code
     private String name;
     private BigDecimal targetPrice;
+    private BigDecimal currentPrice;  // Current price from the scraper
     private boolean targetReached;
     private String productUrl;
     private String marketplace;
@@ -35,12 +36,12 @@ public class PriceAlert {
         this.productId = productId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -57,6 +58,14 @@ public class PriceAlert {
 
     public void setTargetPrice(BigDecimal targetPrice) {
         this.targetPrice = targetPrice;
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public boolean isTargetReached() {

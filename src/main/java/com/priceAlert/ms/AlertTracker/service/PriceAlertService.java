@@ -1,7 +1,6 @@
 package com.priceAlert.ms.AlertTracker.service;
 
 import com.priceAlert.ms.AlertTracker.dto.CreateAlertRequest;
-import com.priceAlert.ms.AlertTracker.exception.InvalidUrlException;
 import com.priceAlert.ms.AlertTracker.exception.ScraperFailureException;
 import com.priceAlert.ms.AlertTracker.exception.UnsupportedMarketplaceException;
 import com.priceAlert.ms.AlertTracker.models.PriceAlert;
@@ -9,7 +8,9 @@ import com.priceAlert.ms.AlertTracker.repository.PriceAlertRepository;
 import com.priceAlert.ms.AlertTracker.util.MarketplaceUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -32,28 +33,28 @@ public class PriceAlertService {
             throw new UnsupportedMarketplaceException("The marketplace for the given URL is not supported.");
         }
 
-        // Validate the URL using scraper service
-        boolean isValid;
+        // Fetch product details from the scraper (combines validation and data fetching)
+        Map<String, Object> scraperResponse;
         try {
-            isValid = scraperValidationService.validateUrl(request.getUrl());
-        } catch (Exception e) {
-            throw new ScraperFailureException("The scraper service failed to process the given URL.");
+            scraperResponse = scraperValidationService.fetchProductDetails(request.getUrl());
+        } catch (IllegalArgumentException e) {
+            throw new ScraperFailureException(e.getMessage());
         }
 
-        if (!isValid) {
-            throw new InvalidUrlException("The provided URL is invalid or does not link to a valid product.");
-        }
+        String productId = (String) scraperResponse.get("productId");
+        BigDecimal currentPrice = BigDecimal.valueOf((Double) scraperResponse.get("price"));
 
         // Create and save PriceAlert
         PriceAlert alert = new PriceAlert();
         alert.setId(UUID.randomUUID().toString());
-        alert.setUserId(request.getUserId());
+        alert.setPhoneNumber(request.getPhoneNumber());
         alert.setName(request.getAlertName());
         alert.setProductUrl(request.getUrl());
         alert.setTargetPrice(request.getTargetPrice());
+        alert.setCurrentPrice(currentPrice);
         alert.setMarketplace(marketplace);
-        alert.setTargetReached(false);
-        alert.setProductId(scraperValidationService.getDummyProductId(request.getUrl()));
+        alert.setTargetReached(currentPrice.compareTo(request.getTargetPrice()) <= 0);
+        alert.setProductId(productId);
 
         return repository.save(alert);
     }
@@ -86,6 +87,7 @@ public class PriceAlertService {
         existingAlert.setProductUrl(updatedAlert.getProductUrl());
         existingAlert.setTargetReached(updatedAlert.isTargetReached());
         existingAlert.setMarketplace(updatedAlert.getMarketplace());
+        existingAlert.setCurrentPrice(updatedAlert.getCurrentPrice()); // Update current price if needed
 
         return repository.save(existingAlert);
     }

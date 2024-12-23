@@ -3,18 +3,18 @@ package com.priceAlert.ms.AlertTracker.dto;
 import java.math.BigDecimal;
 
 public class CreateAlertRequest {
-    private String userId;
+    private String phoneNumber;  // User's phone number with country code
     private String alertName;
     private String url;
     private BigDecimal targetPrice;
 
     // Getters and Setters
-    public String getUserId() {
-        return userId;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAlertName() {
